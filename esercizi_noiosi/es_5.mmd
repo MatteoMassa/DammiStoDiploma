@@ -1,0 +1,23 @@
+erDiagram
+AUTORI {
+    id INTEGER PK
+    nome TEXT
+    cognome TEXT
+}
+LIBRI {
+    id INTEGER PK
+    titolo TEXT
+    autore_id INTEGER FK
+    anno INTEGER
+    genere TEXT
+}
+PRESTITI {
+    id INTEGER PK
+    libro_id INTEGER FK
+    utente TEXT
+    data_prestito TEXT
+    data_restituzione TEXT
+}
+
+AUTORI ||--o{ LIBRI : ha
+LIBRI ||--o{ PRESTITI : è_prestato
