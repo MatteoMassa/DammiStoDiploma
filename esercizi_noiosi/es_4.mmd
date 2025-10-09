@@ -1,0 +1,13 @@
+erDiagram
+    STUDENTI {
+        int Matricola PK
+        string Nome
+        string Cognome
+    }
+    ESAMI {
+        int Id PK
+        int Matricola FK
+        string Corso
+        int Voto
+    }
+    STUDENTI ||--o{ ESAMI : "sostiene"
