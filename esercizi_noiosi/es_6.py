@@ -115,3 +115,66 @@ def query_prestiti_non_restituiti():
 
 #Esercizio 6 che pal
 
+def elenco_libri_con_autori():
+    cursor.execute('''
+        SELECT libri.titolo, libri.anno_pubblicazione, autori.nome, autori.cognome
+        FROM libri
+        JOIN autori ON libri.autore_id = autori.id
+        ORDER BY libri.anno_pubblicazione, libri.titolo
+    ''')
+    return cursor.fetchall()
+
+def elenco_prestiti_con_titolo_utente_data():
+    cursor.execute('''
+        SELECT libri.titolo, prestiti.utente, prestiti.data_prestito
+        FROM prestiti
+        JOIN libri ON prestiti.libro_id = libri.id
+        ORDER BY prestiti.id
+    ''')
+    return cursor.fetchall()
+
+def libri_pubblicati_dopo(anno=2020):
+    cursor.execute('''
+        SELECT libri.titolo, libri.anno_pubblicazione, libri.genere
+        FROM libri
+        WHERE libri.anno_pubblicazione > ?
+        ORDER BY libri.anno_pubblicazione
+    ''', (anno,))
+    return cursor.fetchall()
+
+def numero_prestiti_per_utente():
+    cursor.execute('''
+        SELECT prestiti.utente, COUNT(*) as numero_prestiti
+        FROM prestiti
+        GROUP BY prestiti.utente
+        ORDER BY numero_prestiti DESC, prestiti.utente ASC
+    ''')
+    return cursor.fetchall()
+
+def libri_ordinati_per_genere_e_anno():
+    cursor.execute('''
+        SELECT libri.genere, libri.titolo, libri.anno_pubblicazione
+        FROM libri
+        ORDER BY libri.genere, libri.anno_pubblicazione
+    ''')
+    return cursor.fetchall()
+
+def prestiti_restituiti():
+    cursor.execute('''
+        SELECT libri.titolo, prestiti.utente, prestiti.data_prestito, prestiti.data_restituzione
+        FROM prestiti
+        JOIN libri ON prestiti.libro_id = libri.id
+        WHERE prestiti.data_restituzione IS NOT NULL
+        ORDER BY prestiti.data_prestito
+    ''')
+    return cursor.fetchall()
+
+def autori_e_numero_di_libri_inclusi_senza():
+    cursor.execute('''
+        SELECT autori.nome, autori.cognome, COUNT(libri.id) as numero_libri
+        FROM autori
+        LEFT JOIN libri ON autori.id = libri.autore_id
+        GROUP BY autori.id
+        ORDER BY numero_libri DESC
+    ''')
+    return cursor.fetchall()
